@@ -16,9 +16,9 @@ export function Catalog() {
     loadCatalog()
   }, [])
 
-  const handleAddProductToCart = useCallback((product: IProduct) => {
+  const handleAddProductToCart = (product: IProduct) => {
     dispatch(addProductToCart(product))
-  }, [dispatch])
+  }
 
   return (
     <div>
