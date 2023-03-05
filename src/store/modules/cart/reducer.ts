@@ -1,4 +1,5 @@
 import { Reducer } from "redux"
+import produce from 'immer'
 import { ICartState } from "./types"
 
 const INITIAL_STATE: ICartState = {
@@ -6,28 +7,29 @@ const INITIAL_STATE: ICartState = {
 }
 
 const cart: Reducer<ICartState> = (state = INITIAL_STATE, action) => {
-  switch(action.type) {
-    case 'ADD_PRODUCT_TO_CART': {
-      const { product } = action.payload
+  return produce(state, draft => {
+    switch(action.type) {
+      case 'ADD_PRODUCT_TO_CART': {
+        const { product } = action.payload
 
-      const isAdded = state.items.findIndex(p => p.product.id === product.id)
-      const newProductsArray = [...state.items]
+        const isAdded = draft.items.findIndex(p => p.product.id === product.id)
 
-      if(isAdded !== -1) {
-        const currentProducot = state.items[isAdded]
-        currentProducot.amount = currentProducot.amount + 1
-        newProductsArray[isAdded] = currentProducot
-      } else {
-        newProductsArray.push({ product, amount: 1 })
+        if(isAdded !== -1) {
+          const currentProducot = draft.items[isAdded]
+          currentProducot.amount = currentProducot.amount + 1
+          draft.items[isAdded] = currentProducot
+        } else {
+          draft.items.push({ product, amount: 1 })
+        }
+
+        break
       }
 
-      return {...state, items: newProductsArray}
+      default: {
+        return draft
+      }
     }
-
-    default: {
-      return state
-    }
-  }
+  })
 }
 
 export default cart
