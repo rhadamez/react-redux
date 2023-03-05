@@ -14,13 +14,8 @@ const cart: Reducer<ICartState> = (state = INITIAL_STATE, action) => {
 
         const isAdded = draft.items.findIndex(p => p.product.id === product.id)
 
-        if(isAdded !== -1) {
-          const currentProducot = draft.items[isAdded]
-          currentProducot.amount = currentProducot.amount + 1
-          draft.items[isAdded] = currentProducot
-        } else {
-          draft.items.push({ product, amount: 1 })
-        }
+        if(isAdded !== -1) draft.items[isAdded].amount++
+        else draft.items.push({ product, amount: 1 })
 
         break
       }
